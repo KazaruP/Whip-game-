@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎮 منطقة المعركة</title>
+<link rel="stylesheet" href="css/game.css">
+<script src="https://unpkg.com/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+</head>
+<body class="game-page">
+  <!-- معلومات اللاعب -->
+  <div id="playerHUD">
+    <div class="hud-section">
+      <div class="player-info">
+        <span class="player-name" id="myName">اللاعب</span>
+        <div class="health-bar">
+          <div class="health-fill" id="myHealthBar"></div>
+        </div>
+        <span class="health-value" id="myHealth">100 HP</span>
+      </div>
+      <div class="stats">
+        <div class="stat">
+          <span class="stat-label">👥 اللاعبون:</span>
+          <span class="stat-value" id="playersCount">1</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">📍 الموقع:</span>
+          <span class="stat-value" id="myPosition">(0, 0)</span>
+        </div>
+      </div>
+    </div>
+    
+    <button class="btn-logout" onclick="handleLogout()">🚪 خروج</button>
+  </div>
+
+  <!-- منطقة اللعبة الرئيسية -->
+  <canvas id="gameCanvas"></canvas>
+
+  <!-- عناصر التحكم (تظهر على الجوال فقط) -->
+  <div id="mobileControls" class="mobile-only">
+    <div class="joystick-area">
+      <div id="joystick" class="joystick"></div>
+      <span class="joystick-label">حرك</span>
+    </div>
+    
+    <div class="action-buttons">
+      <button id="attackBtn" class="btn-attack">⚔️ هجوم</button>
+      <button id="specialBtn" class="btn-special">✨ خاص</button>
+    </div>
+  </div>
+
+  <!-- نافذة الدردشة (اختيارية) -->
+  <div id="chatBox" class="chat-box">
+    <div class="chat-header">💬 الدردشة</div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="message system">مرحباً في اللعبة!</div>
+    </div>
+    <div class="chat-input">
+      <input type="text" id="chatInput" placeholder="اكتب رسالة...">
+      <button onclick="sendMessage()">📤</button>
+    </div>
+  </div>
+
+  <script src="js/game.js"></script>
+</body>
+</html>
