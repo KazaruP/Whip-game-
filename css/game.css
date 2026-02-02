@@ -1,0 +1,1349 @@
+/* ============================================
+   تنسيقات صفحة اللعبة الرئيسية - Multiplayer Square Game
+   ============================================ */
+
+/* الأساسيات */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body.game-page {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+    color: #ffffff;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+/* ============================================
+   شريط معلومات اللاعب (HUD) العلوي
+   ============================================ */
+#playerHUD {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(20, 20, 30, 0.92);
+    backdrop-filter: blur(15px) saturate(180%);
+    -webkit-backdrop-filter: blur(15px) saturate(180%);
+    padding: 12px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    border-bottom: 2px solid rgba(0, 255, 136, 0.4);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    transition: all 0.3s ease;
+}
+
+.hud-section {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+/* معلومات اللاعب الأساسية */
+.player-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 8px 16px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+    border: 1px solid rgba(0, 255, 204, 0.3);
+    min-width: 220px;
+}
+
+.player-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00ffcc, #00ff88);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #000;
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.5);
+}
+
+.player-details {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.player-name {
+    font-size: 20px;
+    font-weight: 800;
+    color: #00ffcc;
+    text-shadow: 0 0 12px rgba(0, 255, 204, 0.7);
+    letter-spacing: 0.5px;
+}
+
+.level-badge {
+    background: linear-gradient(135deg, #ffd700, #ffaa00);
+    color: #000;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    display: inline-block;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+/* قسم الصحة */
+.health-section, .xp-section {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 10px 15px;
+    min-width: 220px;
+}
+
+.health-header, .xp-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    color: #ff6b6b;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.xp-header {
+    color: #ffd166;
+}
+
+.health-header i, .xp-header i {
+    font-size: 16px;
+}
+
+.health-bar-container, .xp-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.health-bar, .xp-bar {
+    flex: 1;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    position: relative;
+}
+
+.health-fill {
+    height: 100%;
+    background: linear-gradient(90deg, 
+        #ff0000 0%, 
+        #ff6b6b 25%, 
+        #ffd166 50%, 
+        #06d6a0 75%, 
+        #00ff88 100%);
+    border-radius: 8px;
+    width: 100%;
+    transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+}
+
+.xp-fill {
+    height: 100%;
+    background: linear-gradient(90deg, 
+        #4cc9f0 0%, 
+        #4361ee 50%, 
+        #3a0ca3 100%);
+    border-radius: 8px;
+    width: 0%;
+    transition: width 0.5s ease;
+    box-shadow: 0 0 10px rgba(76, 201, 240, 0.5);
+}
+
+.health-value, .xp-value {
+    font-size: 16px;
+    font-weight: 700;
+    min-width: 100px;
+    text-align: center;
+    padding: 5px 12px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.health-value {
+    color: #ffffff;
+}
+
+.xp-value {
+    color: #4cc9f0;
+}
+
+/* حاوية الإحصائيات */
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    min-width: 280px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+    background: rgba(0, 0, 0, 0.5);
+    transform: translateY(-2px);
+}
+
+.stat-label {
+    font-size: 14px;
+    color: #aaaaaa;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stat-label i {
+    font-size: 14px;
+}
+
+.stat-value {
+    font-size: 18px;
+    font-weight: 800;
+    color: #00ff88;
+    text-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
+}
+
+/* زر الخروج */
+.btn-logout {
+    padding: 12px 25px;
+    background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 16px;
+    box-shadow: 0 6px 20px rgba(255, 65, 108, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 20px;
+}
+
+.btn-logout:hover {
+    background: linear-gradient(135deg, #ff4b2b 0%, #ff416c 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(255, 65, 108, 0.6);
+}
+
+.btn-logout:active {
+    transform: translateY(-1px);
+}
+
+/* ============================================
+   منطقة Canvas للعبة
+   ============================================ */
+#gameCanvas {
+    position: fixed;
+    top: 90px; /* ارتفاع HUD */
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 90px);
+    background: #000000;
+    cursor: crosshair;
+    z-index: 1;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+}
+
+/* ============================================
+   معلومات التصحيح (Debug Stats)
+   ============================================ */
+.game-stats {
+    position: fixed;
+    top: 120px;
+    left: 25px;
+    background: rgba(0, 0, 0, 0.82);
+    color: white;
+    padding: 18px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 255, 136, 0.5);
+    min-width: 220px;
+    z-index: 999;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.stats-title {
+    color: #00ff88;
+    font-weight: 700;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(0, 255, 136, 0.3);
+}
+
+.game-stats .stat-item {
+    background: rgba(255, 255, 255, 0.05);
+    margin: 8px 0;
+}
+
+.game-stats .key {
+    color: #aaaaaa;
+    font-size: 13px;
+}
+
+.game-stats .value {
+    color: #00ffcc;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+}
+
+.debug-toggle {
+    width: 100%;
+    margin-top: 12px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #aaa;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.3s ease;
+}
+
+.debug-toggle:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+}
+
+/* ============================================
+   عناصر التحكم على الجوال
+   ============================================ */
+#mobileControls {
+    position: fixed;
+    bottom: 35px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 35px;
+    pointer-events: none;
+    z-index: 1000;
+    display: none;
+}
+
+.mobile-only {
+    display: none;
+}
+
+/* منطقة الجويستيك */
+.joystick-area {
+    position: relative;
+    pointer-events: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.joystick {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    border: 3px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    position: relative;
+    cursor: move;
+    touch-action: none;
+    box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.4),
+        inset 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.joystick-inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 55px;
+    height: 55px;
+    background: linear-gradient(135deg, #00ff88, #00ffcc);
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 
+        0 0 20px rgba(0, 255, 136, 0.6),
+        inset 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.joystick-label {
+    position: absolute;
+    bottom: -32px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #cccccc;
+    font-size: 14px;
+    white-space: nowrap;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* أزرار الإجراءات */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    align-items: center;
+    pointer-events: auto;
+}
+
+.action-buttons button {
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    border: none;
+    font-size: 28px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+.action-buttons button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transform: scale(0);
+    transition: transform 0.3s ease;
+}
+
+.action-buttons button:active::after {
+    transform: scale(1);
+}
+
+.btn-label {
+    font-size: 12px;
+    margin-top: 5px;
+    font-weight: 600;
+}
+
+/* ألوان الأزرار المختلفة */
+.btn-attack {
+    background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+    color: white;
+}
+
+.btn-special {
+    background: linear-gradient(135deg, #00b4db 0%, #0083b0 100%);
+    color: white;
+}
+
+.btn-heal {
+    background: linear-gradient(135deg, #06d6a0 0%, #00bb7c 100%);
+    color: white;
+}
+
+.btn-dash {
+    background: linear-gradient(135deg, #7209b7 0%, #560bad 100%);
+    color: white;
+}
+
+.action-buttons button:active {
+    transform: scale(0.88);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   نافذة الدردشة
+   ============================================ */
+.chat-box {
+    position: fixed;
+    bottom: 120px;
+    right: 25px;
+    width: 340px;
+    height: 420px;
+    background: rgba(20, 20, 30, 0.92);
+    backdrop-filter: blur(15px) saturate(180%);
+    -webkit-backdrop-filter: blur(15px) saturate(180%);
+    border-radius: 18px;
+    border: 2px solid rgba(0, 255, 136, 0.35);
+    box-shadow: 
+        0 15px 35px rgba(0, 0, 0, 0.6),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.chat-header {
+    background: linear-gradient(90deg, #00ff88 0%, #00ffcc 100%);
+    color: #000000;
+    padding: 15px 25px;
+    font-weight: 800;
+    font-size: 18px;
+    text-align: center;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 18px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.chat-messages::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 136, 0.4);
+    border-radius: 4px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 255, 136, 0.6);
+}
+
+.message {
+    padding: 12px 18px;
+    border-radius: 14px;
+    max-width: 88%;
+    word-wrap: break-word;
+    animation: messageAppear 0.3s ease;
+    line-height: 1.4;
+    font-size: 15px;
+}
+
+@keyframes messageAppear {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.message-time {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-right: 8px;
+    font-weight: 600;
+}
+
+.message-text {
+    color: #ffffff;
+}
+
+.message.system {
+    background: rgba(255, 255, 255, 0.08);
+    align-self: center;
+    font-style: italic;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.message.system .message-text {
+    color: #aaaaaa;
+}
+
+.message.player {
+    background: linear-gradient(135deg, 
+        rgba(0, 255, 136, 0.25) 0%, 
+        rgba(0, 255, 204, 0.15) 100%);
+    align-self: flex-end;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+}
+
+.message.other {
+    background: linear-gradient(135deg, 
+        rgba(52, 152, 219, 0.25) 0%, 
+        rgba(41, 128, 185, 0.15) 100%);
+    align-self: flex-start;
+    border: 1px solid rgba(52, 152, 219, 0.3);
+}
+
+.chat-input {
+    display: flex;
+    padding: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.25);
+    gap: 10px;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    color: white;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+.chat-input input:focus {
+    outline: none;
+    border-color: #00ff88;
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+}
+
+.chat-input input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+#sendChatBtn {
+    padding: 0 22px;
+    background: linear-gradient(135deg, #00ff88, #00cc6a);
+    color: #000000;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#sendChatBtn:hover {
+    background: linear-gradient(135deg, #00cc6a, #00aa55);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+}
+
+/* ============================================
+   قائمة اللاعبين المتصلين
+   ============================================ */
+.players-list {
+    position: fixed;
+    top: 120px;
+    right: 25px;
+    width: 280px;
+    max-height: 400px;
+    background: rgba(20, 20, 30, 0.92);
+    backdrop-filter: blur(15px);
+    border-radius: 18px;
+    border: 2px solid rgba(52, 152, 219, 0.35);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+    z-index: 999;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.list-header {
+    background: linear-gradient(90deg, #3498db 0%, #2980b9 100%);
+    color: #ffffff;
+    padding: 15px 20px;
+    font-weight: 800;
+    font-size: 17px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.15);
+}
+
+.players-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.players-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.players-container::-webkit-scrollbar-thumb {
+    background: rgba(52, 152, 219, 0.5);
+    border-radius: 3px;
+}
+
+.player-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.player-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateX(5px);
+}
+
+.player-item-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3498db, #2ecc71);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: white;
+}
+
+.player-item-info {
+    flex: 1;
+}
+
+.player-item-name {
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.player-item-health {
+    font-size: 13px;
+    color: #aaaaaa;
+    margin-top: 3px;
+}
+
+.player-item-status {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #2ecc71;
+    box-shadow: 0 0 10px #2ecc71;
+}
+
+.player-item-status.away {
+    background: #f39c12;
+    box-shadow: 0 0 10px #f39c12;
+}
+
+.player-item-status.offline {
+    background: #e74c3c;
+    box-shadow: 0 0 10px #e74c3c;
+}
+
+/* ============================================
+   شاشة التحميل
+   ============================================ */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease;
+}
+
+.loading-spinner {
+    width: 70px;
+    height: 70px;
+    border: 5px solid rgba(0, 255, 136, 0.1);
+    border-top-color: #00ff88;
+    border-radius: 50%;
+    animation: spin 1.2s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite;
+    margin-bottom: 25px;
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading-text {
+    color: #00ff88;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: center;
+    text-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
+}
+
+.loading-progress {
+    width: 300px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00ff88, #00ffcc);
+    border-radius: 6px;
+    width: 0%;
+    transition: width 0.5s ease;
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
+}
+
+.progress-text {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+}
+
+/* ============================================
+   شاشة النهاية
+   ============================================ */
+.game-over-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.97);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.game-over-content {
+    background: linear-gradient(135deg, 
+        rgba(30, 30, 46, 0.95) 0%, 
+        rgba(20, 20, 40, 0.98) 100%);
+    padding: 40px;
+    border-radius: 25px;
+    border: 3px solid rgba(255, 65, 108, 0.5);
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.8),
+        0 0 0 1px rgba(255, 255, 255, 0.05),
+        inset 0 0 30px rgba(255, 65, 108, 0.2);
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+}
+
+.game-over-title {
+    font-size: 42px;
+    color: #ff416c;
+    margin-bottom: 25px;
+    text-shadow: 0 0 25px rgba(255, 65, 108, 0.8);
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.game-over-stats {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 25px;
+    border-radius: 15px;
+    margin: 20px 0 30px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.game-over-stats .stat-item {
+    background: rgba(255, 255, 255, 0.05);
+    margin: 12px 0;
+    padding: 12px 20px;
+    border-radius: 10px;
+}
+
+.game-over-actions {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.restart-btn, .menu-btn {
+    padding: 16px 35px;
+    font-size: 18px;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 200px;
+    justify-content: center;
+}
+
+.restart-btn {
+    background: linear-gradient(135deg, #00ff88, #00cc6a);
+    color: #000000;
+}
+
+.menu-btn {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: #ffffff;
+}
+
+.restart-btn:hover, .menu-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.restart-btn:hover {
+    box-shadow: 0 10px 25px rgba(0, 255, 136, 0.4);
+}
+
+.menu-btn:hover {
+    box-shadow: 0 10px 25px rgba(52, 152, 219, 0.4);
+}
+
+/* ============================================
+   منطقة الإشعارات
+   ============================================ */
+.notification-area {
+    position: fixed;
+    top: 100px;
+    right: 25px;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 350px;
+}
+
+.notification {
+    background: rgba(20, 20, 30, 0.95);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 12px;
+    border-left: 5px solid #00ff88;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    animation: slideInRight 0.3s ease, fadeOut 0.5s ease 3s forwards;
+    backdrop-filter: blur(10px);
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+    to { opacity: 0; }
+}
+
+.notification.info {
+    border-left-color: #3498db;
+}
+
+.notification.warning {
+    border-left-color: #f39c12;
+}
+
+.notification.error {
+    border-left-color: #e74c3c;
+}
+
+.notification.success {
+    border-left-color: #2ecc71;
+}
+
+/* ============================================
+   تأثيرات خاصة
+   ============================================ */
+.damage-effect {
+    position: absolute;
+    color: #ff0000;
+    font-size: 28px;
+    font-weight: 900;
+    animation: damageFloat 1.2s ease-out forwards;
+    pointer-events: none;
+    z-index: 999;
+    text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+}
+
+@keyframes damageFloat {
+    0% { opacity: 1; transform: translateY(0) scale(1); }
+    50% { opacity: 1; transform: translateY(-30px) scale(1.3); }
+    100% { opacity: 0; transform: translateY(-60px) scale(1.5); }
+}
+
+.heal-effect {
+    position: absolute;
+    color: #00ff88;
+    font-size: 28px;
+    font-weight: 900;
+    animation: healFloat 1.2s ease-out forwards;
+    pointer-events: none;
+    z-index: 999;
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
+}
+
+@keyframes healFloat {
+    0% { opacity: 1; transform: translateY(0) scale(1); }
+    50% { opacity: 1; transform: translateY(-30px) scale(1.3); }
+    100% { opacity: 0; transform: translateY(-60px) scale(1.5); }
+}
+
+/* ============================================
+   تصميم متجاوب (Responsive Design)
+   ============================================ */
+@media (max-width: 1200px) {
+    .chat-box {
+        width: 320px;
+        height: 380px;
+        right: 20px;
+        bottom: 110px;
+    }
+    
+    .players-list {
+        width: 260px;
+        right: 20px;
+    }
+    
+    .game-stats {
+        left: 20px;
+    }
+}
+
+@media (max-width: 992px) {
+    .hud-section {
+        gap: 15px;
+    }
+    
+    .player-info {
+        min-width: 180px;
+    }
+    
+    .health-section, .xp-section {
+        min-width: 180px;
+    }
+    
+    .stats-container {
+        min-width: 240px;
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-only {
+        display: block;
+    }
+    
+    #mobileControls {
+        display: flex;
+    }
+    
+    #playerHUD {
+        padding: 10px 15px;
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+        height: auto;
+    }
+    
+    .hud-section {
+        justify-content: space-between;
+        gap: 15px;
+    }
+    
+    .player-info {
+        min-width: 100%;
+        order: 1;
+    }
+    
+    .health-section, .xp-section {
+        min-width: calc(50% - 10px);
+        order: 2;
+    }
+    
+    .stats-container {
+        order: 3;
+        min-width: 100%;
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .btn-logout {
+        order: 4;
+        width: 100%;
+        justify-content: center;
+        margin-left: 0;
+        margin-top: 10px;
+    }
+    
+    #gameCanvas {
+        top: 180px;
+        height: calc(100vh - 180px);
+    }
+    
+    .chat-box, .players-list, .game-stats {
+        display: none; /* إخفاء على الجوال لحفظ المساحة */
+    }
+    
+    .joystick {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .joystick-inner {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .action-buttons button {
+        width: 75px;
+        height: 75px;
+        font-size: 24px;
+    }
+    
+    .btn-label {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 576px) {
+    .player-name {
+        font-size: 18px;
+    }
+    
+    .health-bar, .xp-bar {
+        height: 16px;
+    }
+    
+    .health-value, .xp-value {
+        font-size: 14px;
+        min-width: 80px;
+    }
+    
+    .health-section, .xp-section {
+        min-width: 100%;
+    }
+    
+    .stats-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .stat-value {
+        font-size: 16px;
+    }
+    
+    .joystick {
+        width: 110px;
+        height: 110px;
+    }
+    
+    .action-buttons button {
+        width: 70px;
+        height: 70px;
+        font-size: 22px;
+    }
+    
+    #mobileControls {
+        padding: 0 20px;
+        bottom: 25px;
+    }
+}
+
+@media (max-width: 400px) {
+    #playerHUD {
+        padding: 8px 12px;
+    }
+    
+    .player-avatar {
+        width: 45px;
+        height: 45px;
+        font-size: 22px;
+    }
+    
+    .player-name {
+        font-size: 16px;
+    }
+    
+    .level-badge {
+        font-size: 12px;
+        padding: 2px 8px;
+    }
+    
+    .joystick {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .action-buttons button {
+        width: 65px;
+        height: 65px;
+        font-size: 20px;
+    }
+    
+    .joystick-label {
+        font-size: 12px;
+        bottom: -28px;
+    }
+}
+
+/* ============================================
+   تحسينات أداء ورسومات
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* تحسين العرض على الأجهزة عالية الدقة */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    #gameCanvas {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+/* دعم الأجهزة المظلمة/فاتحة */
+@media (prefers-color-scheme: light) {
+    body.game-page {
+        background: linear-gradient(135deg, #e0e0e0 0%, #c0c0d0 50%, #a0a0c0 100%);
+        color: #222222;
+    }
+    
+    #playerHUD {
+        background: rgba(240, 240, 250, 0.92);
+        border-bottom: 2px solid rgba(0, 150, 80, 0.4);
+    }
+    
+    .player-info {
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid rgba(0, 150, 100, 0.3);
+    }
+    
+    .player-name {
+        color: #008855;
+    }
+    
+    .health-section, .xp-section {
+        background: rgba(255, 255, 255, 0.15);
+    }
+    
+    .chat-box {
+        background: rgba(240, 240, 250, 0.92);
+        border: 2px solid rgba(0, 150, 80, 0.35);
+    }
+    
+    .chat-header {
+        background: linear-gradient(90deg, #00cc77 0%, #00bb99 100%);
+        color: #ffffff;
+    }
+}
+
+/* ============================================
+   فصول متحركة للخلفية (اختياري)
+   ============================================ */
+body.game-page::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(0, 255, 136, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(0, 255, 204, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(76, 201, 240, 0.05) 0%, transparent 50%);
+    z-index: 0;
+    pointer-events: none;
+    animation: backgroundFloat 20s ease-in-out infinite;
+}
+
+@keyframes backgroundFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(-20px, -10px) scale(1.02); }
+    66% { transform: translate(15px, 20px) scale(0.98); }
+}
+
+/* خطوط متحركة في الخلفية */
+body.game-page::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    background-image: 
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    z-index: 0;
+    pointer-events: none;
+    animation: gridMove 30s linear infinite;
+    opacity: 0.3;
+}
+
+@keyframes gridMove {
+    from { transform: translate(0, 0); }
+    to { transform: translate(-50px, -50px); }
+}
